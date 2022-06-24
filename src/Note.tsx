@@ -1,7 +1,18 @@
-import React, {forwardRef} from 'react';
+import React, {FunctionComponent} from 'react';
 
-const Note = forwardRef((props, ref) => {
-    const {note, username,  onClick} = props;
+type Props = {
+    note: Array<{
+        username: string,
+        text: string,
+        x: number,
+        y: number
+    }>,
+    isMine: boolean,
+    onClick: (number: number) => void,
+};
+
+const Note:FunctionComponent = (props: Props) => {
+    const {note, isMine,  onClick} = props;
     return (
             <div
                 style={{
@@ -9,13 +20,12 @@ const Note = forwardRef((props, ref) => {
                     height: '100px',
                     border: '2px solid #000',
                     borderRadius: '4px',
-                    backgroundColor: note.username === username ? 'pink' : 'lightblue',
+                    backgroundColor: isMine ? 'pink' : 'lightblue',
                     padding: '5px',
                     position: 'absolute',
                     left: note.x,
-                    top: note.y - 90,
+                    top: note.y,
                 }}
-                ref={ref}
             >
                 <div style={{fontWeight: 'bold'}}>{`made by ${note.username}`}</div>
                 <div
@@ -26,10 +36,10 @@ const Note = forwardRef((props, ref) => {
                         height: '80px'
                     }}
                 >
-                    <span onClick={onClick}>{note.text || 'Click here to add text'}</span>
+                    <span onClick={isMine ? onClick : () => {}}>{note.text || 'Click here to add text'}</span>
                 </div>
             </div>
     );
-});
+};
 
 export default Note;

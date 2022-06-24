@@ -1,11 +1,11 @@
 import './App.css';
-import Note from './Note';
-import React, {useState, useEffect, useRef} from 'react';
+import Note from './Note.tsx';
+import React, {useState, useEffect, FunctionComponent} from 'react';
 import Draggable from 'react-draggable';
 import io from "socket.io-client";
 let socket = io("/");
 
-const Board = () => {
+const Board:FunctionComponent = () => {
     const [username, setUsername] = useState(null);
     const [notes, setNotes] = useState([]);
     const [x, setX] = useState(0);
@@ -39,7 +39,7 @@ const Board = () => {
         const newNotes = [...notes, ...[{
             username: username,
             x: x,
-            y: y
+            y: y - 90
         }]];
         saveNotes({notes: newNotes, emit: true});
     };
@@ -56,7 +56,7 @@ const Board = () => {
             return;
         }
         const text = prompt('Please, enter a new text to the note:');
-        const newNotes = notes.map(note => note);
+        const newNotes = JSON.parse(JSON.stringify(notes));
         newNotes[index].text = text;
         saveNotes({notes: newNotes, emit: true});
         return false;
@@ -90,8 +90,6 @@ const Board = () => {
         e.stopPropagation();
     };
 
-    const noteRef = useRef();
-
 
     return (
         <div
@@ -108,16 +106,15 @@ const Board = () => {
                 >
                     <div>
                         <Note
-                            ref={noteRef}
                             note={note}
                             index={index}
                             onClick={e => onNoteClick(note, index, e)}
-                            username={username}
+                            isMine={note.username === username}
                         />
                     </div>
                 </Draggable>
             ))}
-            {!!notes.length && <button onClick={onButtonClick}>Remove all notes</button>}
+            {!!notes.length && <button style={{zIndex: 999, position: 'absolute', top: 100, left: 20}} onClick={onButtonClick}>Remove all notes</button>}
         </div>
     );
 
