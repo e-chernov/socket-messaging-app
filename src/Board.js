@@ -104,6 +104,7 @@ const Board = () => {
                 <Draggable
                     onStart={onDragStart}
                     onStop={onDragStop}
+                    disabled={note.username !== username}
                 >
                     <div>
                         <Note
