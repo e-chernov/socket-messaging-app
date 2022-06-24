@@ -3,12 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import io from 'socket.io-client';
-
-let socket = io("/");
-socket.on('message from server', function(msg){
-    alert(msg);
-});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
